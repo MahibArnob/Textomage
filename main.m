@@ -1,5 +1,5 @@
 %Read the image
-RGBI = imread('../Images/img3.jpg');
+RGBI = imread('../Images/test3.jpg');
 
 %Convert to Gray Scale Image
 GI = rgb2gray(RGBI);
@@ -20,6 +20,14 @@ T1 = graythresh(GI);
 
 %Convery gray scale image to binary image using the threshold
 BI = imbinarize(GI,T);
+
+ones = numel(find(BI));
+total = numel(BI);
+
+if ones > (total-ones)
+    BI = ~BI;
+end
+
 
 figure
 imshow(BI);
@@ -89,7 +97,7 @@ xmax = xmin + bbox(:,3) - 1;
 ymax = ymin + bbox(:,4) - 1;
 
 % Expand the bounding boxes by a small amount.
-expansionAmount = 0.07;
+expansionAmount = 0.1;
 xmin = (1-expansionAmount) * xmin;
 ymin = (1-expansionAmount) * ymin;
 xmax = (1+expansionAmount) * xmax;
@@ -122,7 +130,7 @@ overlapRatio(1:n+1:n^2) = 0;
 
 % Create the graph
 g = graph(overlapRatio);
-plot(g)
+%plot(g)
 
 % Find the connected text regions within the graph
 componentIndices = conncomp(g);
