@@ -4,7 +4,6 @@ RGBI = imread('../Images/img3.jpg');
 %Convert to Gray Scale Image
 GI = rgb2gray(RGBI);
 
-
 figure
 imshow(GI)
 hold on
@@ -90,7 +89,7 @@ xmax = xmin + bbox(:,3) - 1;
 ymax = ymin + bbox(:,4) - 1;
 
 % Expand the bounding boxes by a small amount.
-expansionAmount = 0.02;
+expansionAmount = 0.07;
 xmin = (1-expansionAmount) * xmin;
 ymin = (1-expansionAmount) * ymin;
 xmax = (1+expansionAmount) * xmax;
@@ -103,13 +102,15 @@ xmax = min(xmax, size(LI2,2));
 ymax = min(ymax, size(LI2,1));
 
 % Show the expanded bounding boxes
+
+%Merge the columns to make a matrix.
 expandedBBoxes = [xmin ymin xmax-xmin+1 ymax-ymin+1];
-IExpandedBBoxes = insertShape(LI2,'Rectangle',expandedBBoxes,'LineWidth',2);
+
+BBI = insertShape(LI2,'Rectangle',expandedBBoxes,'LineWidth',2);
 
 figure
-imshow(IExpandedBBoxes)
+imshow(BBI)
 title('Bounding Boxes Text')
-
 
 % Compute the overlap ratio
 overlapRatio = bboxOverlapRatio(expandedBBoxes, expandedBBoxes);
@@ -121,6 +122,7 @@ overlapRatio(1:n+1:n^2) = 0;
 
 % Create the graph
 g = graph(overlapRatio);
+plot(g)
 
 % Find the connected text regions within the graph
 componentIndices = conncomp(g);
@@ -147,5 +149,3 @@ title('Detected Text')
 
 ocrtxt = ocr(LI2, textBBoxes);
 [ocrtxt.Text]
-
-%contour merging maybe
