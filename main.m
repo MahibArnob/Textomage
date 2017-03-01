@@ -1,5 +1,5 @@
 %Read the image
-RGBI = imread('../Images/test3.jpg');
+RGBI = imread('../Images/img5.jpg');
 
 %Convert to Gray Scale Image
 GI = rgb2gray(RGBI);
@@ -66,21 +66,31 @@ w = bbox(:,3);
 h = bbox(:,4);
 aspectRatio = h./w;
 
+stats.Area
+
 % Threshold the data to determine which regions to remove. These thresholds
 % may need to be tuned for other images.
-idx = aspectRatio' > 0.96;
-idx = idx & [stats.Eccentricity] > 0.32 ;
-idx = idx & [stats.Solidity] < 0.66;
+idx = aspectRatio' > 0.74; %0.96
+idx = idx & [stats.Eccentricity] > 0.20 ; %0.32
+idx = idx & [stats.Solidity] < 1.00001; %0.66
 idx = idx & [stats.EulerNumber] < 1.000001 & [stats.EulerNumber] > -1.000001;
 idx = idx & [stats.Area] > 101;
 idx = idx & [stats.FilledArea] > 112;
-idx = idx & [stats.Orientation] < 90 ;
+idx = idx & [stats.Orientation] < 90.0001 ; %90
 
 keeperIdx = find(idx); %Returns indices of non-zero elements.
 
 BI2 = ismember(LI, keeperIdx);
 figure
 imshow(BI2);
+title('Removal of non-text regions')
+
+ones = numel(find(BI2));
+total = numel(BI2);
+
+if ones > (total-ones)
+    BI2 = ~BI2;
+end
 
 [LI2] = bwlabel(BI2);
 
