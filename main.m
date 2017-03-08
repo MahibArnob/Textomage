@@ -1,5 +1,11 @@
 %Read the image
-RGBI = imread('../Images/img5.jpg');
+RGBI = imread('../Images/mid1.jpg');
+
+figure
+imshow(RGBI)
+hold on
+title('Original Image')
+hold off
 
 %Convert to Gray Scale Image
 GI = rgb2gray(RGBI);
@@ -65,8 +71,6 @@ bbox = vertcat(stats.BoundingBox);
 w = bbox(:,3);
 h = bbox(:,4);
 aspectRatio = h./w;
-
-stats.Area
 
 % Threshold the data to determine which regions to remove. These thresholds
 % may need to be tuned for other images.
